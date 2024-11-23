@@ -24,10 +24,14 @@
 
 <style>
     :global {
+        @import url('https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap');
+
         * {
             padding: 0;
             margin: 0;
             color: white;
+            accent-color: #0082A1;
+            font-family: "Parkinsans";
         }
 
         body {
@@ -61,7 +65,7 @@
     }
 
     .nav-item:hover, .nav-item-hover {
-        border-bottom: 1px solid #0082A1;
+        border-bottom: 2px solid #0082A1;
     }
 
     #login {
