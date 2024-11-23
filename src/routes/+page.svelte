@@ -71,7 +71,7 @@
         <textarea id="note"></textarea>
     </div>
 
-    <button id="button-save">Save note</button>
+    <button class="btn-primary" id="button-save">Save note</button>
 </main>
 
 <style>
@@ -126,9 +126,6 @@
 
     #button-save {
         width: 200px;
-        border: 1px solid white;
-        border-radius: 8px;
-        background-color: #0082A1;
         margin: 20px 0px;
         padding: 10px;
         transition: transform 400ms;
@@ -136,7 +133,6 @@
     }
 
     #button-save:active {
-        /* scale: .95; */
         transition-duration: 150ms;
         transform: scale(.9);
     }
