@@ -7,7 +7,7 @@
         <li><a href="/" class="nav-item" class:nav-item-hover={$page.url.pathname === "/"}>Create note</a></li>
         <li><a href="/about" class="nav-item" class:nav-item-hover={$page.url.pathname === "/about"}>About</a></li>
     </ul>
-    <a href="/login" class:login-hover={$page.url.pathname === "/login"} id="login">Login</a>
+    <a href="/login" class:login-hover={$page.url.pathname === "/login"} id="login-link">Login</a>
 </header>
 <hr>
 <main>
@@ -44,6 +44,12 @@
         a {
             text-decoration: none;
         }
+
+        .btn-primary {
+            border: 1px solid white;
+            border-radius: 8px;
+            background-color: #0082A1;
+        }
     }
 
     header {
@@ -68,7 +74,7 @@
         border-bottom: 2px solid #0082A1;
     }
 
-    #login {
+    #login-link {
         position: absolute;
         right: 0;
         margin: 8px;
@@ -77,7 +83,7 @@
         border-radius: 10px;
     }
 
-    #login:hover, #login.login-hover {
+    #login-link:hover, #login-link.login-hover {
         border-width: 2px;
         margin-right: 7px;
     }
