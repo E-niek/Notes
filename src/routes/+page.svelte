@@ -1,13 +1,20 @@
+<script>
+    let noteData = ``;
+    let preview = false;
+</script>
+
+<title>Home</title>
 <main>
     <h4 id="label">Enter your note:</h4>
     <div id="input-wrapper">
         <div id="options-wrapper">
             <div>
                 <label for="preview-toggle">Preview:</label>
-                <input type="checkbox" id="preview-toggle">
+                <input type="checkbox" id="preview-toggle" bind:checked={preview}>
             </div>
             <select id="language-select">
                 <option disabled selected>Choose a language</option>
+                <option value="none">No language</option>
                 <option value="abap">ABAP</option>
                 <option value="ada">Ada</option>
                 <option value="apex">Apex</option>
@@ -68,7 +75,11 @@
                 <option value="yaml">YAML</option>
             </select>
         </div>
-        <textarea id="note"></textarea>
+        {#if preview}
+            <div id="note" style="line-height: 20px;">{@html noteData}</div>
+        {:else}
+            <textarea id="note" bind:value={noteData}></textarea>
+        {/if}
     </div>
 
     <button class="btn-primary" id="button-save">Save note</button>
@@ -121,7 +132,19 @@
         margin-top: 10px;
         padding: 10px;
         color: black;
+        background-color: white;
         resize: none;
+        white-space: pre-wrap;
+    }
+
+    :global {
+        #note * {
+            color: black;
+        }
+
+        #note li{
+            margin-left: 15px;
+        }
     }
 
     #button-save {

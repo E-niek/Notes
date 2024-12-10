@@ -1,3 +1,4 @@
+<title>Login</title>
 <main>
     <h3>Welcome back!</h3>
     <form id="login-wrapper" method="post">
