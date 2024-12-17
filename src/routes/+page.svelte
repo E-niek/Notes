@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     let noteData = ``;
     let preview = false;
 </script>
