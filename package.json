@@ -26,6 +26,7 @@
 		"@types/mysql": "^2.15.26",
 		"mysql2": "^3.11.5",
 		"mysql2-promise": "^0.1.4",
-		"sqlite3": "^5.1.7"
+		"sqlite3": "^5.1.7",
+		"svelte-purify": "^1.1.42"
 	}
 }

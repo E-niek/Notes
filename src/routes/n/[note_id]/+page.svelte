@@ -1,22 +1,21 @@
 <script lang="ts">
+    import { Render } from "svelte-purify";
     export let data: {data: {user_id: number, data: string}[]};
-
-    console.log("data: " + data.data);
 </script>
 
-<title>Home</title>
+<title>Note</title>
 <main>
     <div id="input-wrapper">
         {#if data.data === null}
             <h1>Woah, couldn't find a note with this id...</h1>
         {:else}
             {#each data.data as note}
-                <div id="note" style="line-height: 20px;">{@html note.data}</div>
+                <div id="note" style="line-height: 20px;"><Render html={note.data}/></div>
             {/each}
         {/if}
     </div>
 
-    <button class="btn-primary" id="button-save">Save note</button>
+    <button class="btn-primary" id="button-save">Copy url</button>
 </main>
 
 <style>
