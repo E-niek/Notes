@@ -1,6 +1,22 @@
 <script lang="ts">
+    import { page } from "$app/state";
+    import type { Note } from "$lib/server/database";
+
     let noteData = ``;
     let preview = false;
+
+    async function SaveNote() {
+        console.log("skjhfs");
+        const response = await fetch("/api/saveNote", {
+            method: "POST",
+            body: JSON.stringify({
+                noteData: `${noteData}`
+            })
+        });
+
+        const id = (await response.json())[0].id;
+        alert(document.URL + "n/" + id);
+    }
 </script>
 
 <title>Home</title>
@@ -82,7 +98,7 @@
         {/if}
     </div>
 
-    <button class="btn-primary" id="button-save">Save note</button>
+    <button class="btn-primary" id="button-save" on:click={SaveNote}>Save note</button>
 </main>
 
 <style>
