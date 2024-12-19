@@ -1,12 +1,9 @@
 import { json } from "@sveltejs/kit";
-import { SaveNote, type Note } from "$lib/server/database";
+import { SaveNote, type Note } from "$lib/db/database";
 
 export async function POST({request}) {
-    const {noteData} = await request.json(); 
-    const response: Note[] = JSON.parse(JSON.stringify(await SaveNote(noteData)));
-
-    console.log("RETURN: " + response[0].id);
-    console.log("1: " + json(response));
+    const {language, noteTitle, noteText} = await request.json(); 
+    const response: Note[] = JSON.parse(JSON.stringify(await SaveNote(language, noteTitle, noteText)));
 
     return json(response);
 }
