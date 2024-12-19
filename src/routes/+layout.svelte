@@ -1,13 +1,16 @@
 <script lang="ts">
-    import { page } from "$app/stores";
+    import { page } from "$app/state";
+
+    export const noteUrl = `${page.url}n/`;
 </script>
 
 <header>
     <ul class="navigation">
-        <li><a href="/" class="nav-item" class:nav-item-hover={$page.url.pathname === "/"}>Create note</a></li>
-        <li><a href="/about" class="nav-item" class:nav-item-hover={$page.url.pathname === "/about"}>About</a></li>
+        <li><a href="/notes" class="nav-item" class:nav-item-hover={page.url.pathname === "/notes"}>Notes</a></li>
+        <li><a href="/" class="nav-item" class:nav-item-hover={page.url.pathname === "/"}>Create note</a></li>
+        <li><a href="/about" class="nav-item" class:nav-item-hover={page.url.pathname === "/about"}>About</a></li>
     </ul>
-    <a href="/login" class:login-hover={$page.url.pathname === "/login"} id="login-link">Login</a>
+    <a href="/login" class:login-hover={page.url.pathname === "/login"} id="login-link">Login</a>
 </header>
 <hr>
 <main>

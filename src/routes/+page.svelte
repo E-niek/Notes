@@ -1,21 +1,39 @@
 <script lang="ts">
     import { page } from "$app/state";
-    import type { Note } from "$lib/server/database";
+    import DOMPurify from "isomorphic-dompurify";
 
-    let noteData = ``;
+    let noteTitle = "";
+    let noteText = "";
+    // let language = "";
     let preview = false;
+    let save = false;
+
+    let id: number = 0;
+    const noteUrl = `${page.url.origin}/n/`;
 
     async function SaveNote() {
-        console.log("skjhfs");
-        const response = await fetch("/api/saveNote", {
-            method: "POST",
-            body: JSON.stringify({
-                noteData: `${noteData}`
-            })
-        });
+        if(noteText !== "") {
+            noteTitle = noteTitle === "" ? "{No title}" : noteTitle;
+            noteTitle = noteTitle.replace('"', "'");
+            noteText = noteText.replace(/["]/g, "'");
 
-        const id = (await response.json())[0].id;
-        alert(document.URL + "n/" + id);
+            const response = await fetch("/api/saveNote", {
+                method: "POST",
+                body: JSON.stringify({
+                    noteTitle: `${DOMPurify.sanitize(noteTitle)}`,
+                    noteText: `${DOMPurify.sanitize(noteText)}`
+                })
+            });
+
+            id = (await response.json())[0].id;
+            console.log(id);
+            save = true;
+            copyUrl();
+        }
+    }
+
+    function copyUrl() {
+        navigator.clipboard.writeText(noteUrl + id);
     }
 </script>
 
@@ -91,14 +109,19 @@
                 <option value="yaml">YAML</option>
             </select>
         </div>
+        <input placeholder="Title..." id="noteTitle" bind:value={noteTitle}>
         {#if preview}
-            <div id="note" style="line-height: 20px;">{@html noteData}</div>
+            <div id="noteText" style="line-height: 20px;">{@html DOMPurify.sanitize(noteText)}</div>
         {:else}
-            <textarea id="note" bind:value={noteData}></textarea>
+            <textarea placeholder="Your note..." id="noteText" bind:value={noteText}></textarea>
         {/if}
     </div>
 
-    <button class="btn-primary" id="button-save" on:click={SaveNote}>Save note</button>
+    {#if !save}
+        <button class="btn-primary" id="button-save" on:click={SaveNote}>Save note</button>
+    {:else}
+        <button class="btn-primary" id="button-copy" on:click={copyUrl}>{noteUrl + id}<img src="/media/copy.svg" alt="copy"></button>
+    {/if}
 </main>
 
 <style>
@@ -140,7 +163,17 @@
         padding: 6px 10px;
     }
 
-    #note {
+    #noteTitle {
+        width: 710px;
+        height: 30px;
+        border: 0;
+        border-radius: 5px;
+        margin-top: 10px;
+        padding: 0px 5px;
+        color: black;
+    }
+
+    #noteText {
         height: 100%;
         width: 700px;
         border: 0;
@@ -154,11 +187,11 @@
     }
 
     :global {
-        #note * {
+        #noteText * {
             color: black;
         }
 
-        #note li{
+        #noteText li{
             margin-left: 15px;
         }
     }
@@ -171,8 +204,24 @@
         transform: scale(1);
     }
 
-    #button-save:active {
-        transition-duration: 150ms;
+    #button-copy {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0px;
+        padding: 10px;
+        transition: transform 400ms;
+        scale: (1);
+    }
+
+    #button-copy img {
+        display: block;
+        width: 20px;
+        margin-left: 10px;
+    }
+
+    #button-save:active, #button-copy:active {
+        transition-duration: 50ms;
         transform: scale(.9);
     }
 </style>

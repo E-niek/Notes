@@ -1,17 +1,12 @@
-import { mySQLConnFn } from "$lib/server/database";
-import { json } from "stream/consumers";
-
-let data;
-
-export async function load({params}) {
-    let mySQLConn = await mySQLConnFn();
-
-    let results = await mySQLConn.query(`SELECT * FROM note WHERE id = "${params.note_id}";`).then(([rows, fields]) => {
-        return rows;
+export async function load({params, fetch}) {
+    const response = await fetch("/api/getNote", {
+        method: "POST",
+        body: JSON.stringify({
+            id: `${params.note_id}`
+        })
     });
 
+    const note = (await response.json())[0];
 
-    return {
-        data: results
-    };
+    return {note};
 }
