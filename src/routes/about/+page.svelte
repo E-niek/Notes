@@ -1,9 +1,10 @@
 <title>About</title>
 <main>
     <p>
-        This is a little schoolproject, not anything too cool...<br>
+        This is a little project for school, made by Eniek...<br>
         Check out the <a href="https://github.com/E-niek/Notes" target="_blank">source code</a> if you like :)
     </p>
+
 </main>
 
 <style>

@@ -11,7 +11,7 @@
     {:else}
         <div id="note-wrapper">
             <h3 id="noteTitle">{data.note.title}</h3>
-            <div id="noteText" style="line-height: 20px;">{@html DOMPurify.sanitize(data.note.text)}</div>
+            <div id="noteText">{@html DOMPurify.sanitize(data.note.text)}</div>
         </div>
     {/if}
 </main>
