@@ -1,7 +1,5 @@
 FROM node:20.18.1-alpine
 
-ENV NODE_ENV=docker
-
 WORKDIR /app
 
 COPY package*.json ./

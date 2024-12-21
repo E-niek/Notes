@@ -26,7 +26,6 @@
             });
 
             id = (await response.json())[0].id;
-            console.log(id);
             save = true;
             copyUrl();
         }

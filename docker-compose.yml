@@ -2,7 +2,8 @@ services:
   notes_app:
     container_name: notes_app
     image: eniek/notes
-    network_mode: host
+    networks:
+      - notes
     depends_on:
       - notes_db
     ports:
@@ -10,16 +11,16 @@ services:
     environment:
       # The origin of where you will be accessing this website from
       - ORIGIN=http://localhost:3000
-      - DB_HOST=localhost
-      - DB_PORT=3001
-      - DB_DB=notes
+      - DB_HOST=notes_db
+      - DB_PORT=3306
+      - DB_DATABASE=notes
       - DB_USER=notes
       - DB_PASSWORD=notesdb1234
   notes_db:
     container_name: notes_db
     image: mysql
-    ports:
-      - 3001:3306
+    networks:
+      - notes
     environment:
       - MYSQL_ROOT_USER=root
       - MYSQL_ROOT_PASSWORD=verysecretpassword1234
@@ -29,3 +30,6 @@ services:
     volumes:
       # Make sure that init.sql is in the same folder as docker-compose.yml
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+networks:
+  notes:
