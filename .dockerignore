@@ -1,0 +1,12 @@
+.dockerignore
+.docker-compose.yml
+.git
+.gitignore
+README.md
+.npmrc
+.svelte-kit
+.vscode
+node_modules
+build
+package
+**/.env

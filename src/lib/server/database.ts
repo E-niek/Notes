@@ -1,5 +1,5 @@
 import mysql from "mysql2/promise"
-import {dbHost, dbDb, dbUser, dbPassword} from "$env/static/private"
+import { env } from "$env/dynamic/private";
 
 export type Note = {
     id: number;
@@ -10,13 +10,19 @@ export type Note = {
 };
 
 const tableNotes = "notes";
+const DB_HOST = env.DB_HOST;
+const DB_PORT = +env.DB_PORT; // the plus converts this to an int. this because else the code editor would give an error (and that's just annoying)
+const DB_DB = env.DB_DATABASE;
+const DB_USER = env.DB_USER;
+const DB_PASSWORD = env.DB_PASSWORD;
 
 export function dbConn() {
     const _db = mysql.createConnection({
-        host: dbHost,
-        database: dbDb,
-        user: dbUser,
-        password: dbPassword,
+        host: DB_HOST,
+        port: DB_PORT,
+        database: DB_DB,
+        user: DB_USER,
+        password: DB_PASSWORD,
     });
 
     return _db;
