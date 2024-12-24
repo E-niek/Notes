@@ -38,11 +38,18 @@
         flex-direction: column;
         align-items: center;
         font-size: 20px;
+        text-align: center;
         margin: 5px 0px;
         font-size: 15px;
     }
 
     .note h5 {
         font-style: italic;
+    }
+
+    @media (max-width: 800px) {
+        .note {
+            font-size: 12px;
+        }
     }
 </style>

@@ -1,9 +1,13 @@
 import { json } from "@sveltejs/kit";
-import { SaveNote, type Note } from "$lib/server/database";
+import { query } from "$lib/server/database";
+import { randomUUID } from "crypto";
 
 export async function POST({request}) {
     const {noteTitle, noteText} = await request.json(); 
-    const response: Note[] = JSON.parse(JSON.stringify(await SaveNote(noteTitle, noteText)));
+    const _noteTitle = noteTitle === "" ? "{No title}" : noteTitle;
+    
+    const _randomUUID = randomUUID();
+    const response = await query(`INSERT INTO notes(id, title, text) VALUES("${_randomUUID}", "${_noteTitle}", "${noteText}");`);
 
-    return json(response);
+    return json({id: _randomUUID});
 }
