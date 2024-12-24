@@ -40,7 +40,9 @@
 	"dependencies": {
 		"@sveltejs/adapter-node": "^5.2.11",
 		"isomorphic-dompurify": "^2.19.0",
+		"lucia": "^3.2.2",
 		"mysql2": "^3.11.5",
-		"mysql2-promise": "^0.1.4"
+		"mysql2-promise": "^0.1.4",
+		"svelte-hamburgers": "^5.0.0"
 	}
 }

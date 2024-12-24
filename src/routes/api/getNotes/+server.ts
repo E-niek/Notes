@@ -1,8 +1,6 @@
 import { json } from "@sveltejs/kit";
-import { GetNote, GetNotes, SaveNote, type Note } from "$lib/server/database";
+import { query } from "$lib/server/database";
 
 export async function GET() {
-    const response: Note[] = JSON.parse(JSON.stringify(await GetNotes()));
-
-    return json(response);
+    return json(await query(`SELECT id, user_id, DATE_FORMAT(created, "%Y-%m-%d") AS "created", title, text FROM notes ORDER BY created DESC;`));
 }

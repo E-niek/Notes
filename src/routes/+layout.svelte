@@ -1,20 +1,41 @@
 <script lang="ts">
     import { page } from "$app/state";
+    import { Hamburger } from "svelte-hamburgers";
+    import { slide } from "svelte/transition";
+
+    let {children} = $props();
+
+    let open = $state(false);
 
     export const noteUrl = `${page.url}n/`;
 </script>
 
 <header>
-    <ul class="navigation">
-        <li><a href="/notes" class="nav-item" class:nav-item-hover={page.url.pathname === "/notes"}>Notes</a></li>
-        <li><a href="/" class="nav-item" class:nav-item-hover={page.url.pathname === "/"}>Create note</a></li>
-        <li><a href="/about" class="nav-item" class:nav-item-hover={page.url.pathname === "/about"}>About</a></li>
-    </ul>
-    <a href="/login" class:login-hover={page.url.pathname === "/login"} id="login-link">Login</a>
+    <div id="header-desktop">
+        <ul id="navigation-desktop">
+            <li><a href="/allnotes" class="nav-item-desktop" class:nav-item-hover={page.url.pathname === "/allnotes"}>All notes</a></li>
+            <li><a href="/" class="nav-item-desktop" class:nav-item-hover={page.url.pathname === "/"}>Create note</a></li>
+            <li><a href="/mynotes" class="nav-item-desktop" class:nav-item-hover={page.url.pathname === "/mynotes"}>My notes</a></li>
+        </ul>
+        <a href="/login" class:login-desktop-hover={page.url.pathname === "/login"} id="login-desktop">Login</a>
+    </div>
+    <div id="header-mobile">
+        <Hamburger type="squeeze" --color="white" bind:open/>
+        {#if open}
+            <div id="navigation-wrapper-mobile" in:slide="{{duration: 1000}}" out:slide="{{duration: 1000}}">
+                <ul id="navigation-mobile">
+                    <li><a href="/allnotes" class="nav-item-mobile" class:nav-item-hover={page.url.pathname === "/allnotes"}>All notes</a></li>
+                    <li><a href="/" class="nav-item-mobile" class:nav-item-hover={page.url.pathname === "/"}>Create note</a></li>
+                    <li><a href="/mynotes" class="nav-item-mobile" class:nav-item-hover={page.url.pathname === "/mynotes"}>My notes</a></li>
+                </ul>
+                <a href="/login" class:login-mobile-hover={page.url.pathname === "/login"} id="login-mobile">Login</a>
+            </div>
+        {/if}
+    </div>
 </header>
 <hr>
 <main>
-    <slot/>
+    {@render children()}
 </main>
 <footer>
     <hr>
@@ -55,29 +76,81 @@
         }
     }
 
-    header {
+    #header-desktop {
         display: flex;
         justify-content: center;
         align-items: center;
         background-color: transparent;
     }
 
-    .navigation {
+    #header-mobile {
+        display: none;
+    }
+
+    #navigation-desktop {
         display: flex;
         margin: 16px 0px;
         list-style: none;
     }
 
-    .nav-item {
+    .nav-item-desktop {
         margin: 0px 10px;
         font-size: 17px;
     }
 
-    .nav-item:hover, .nav-item-hover {
+    .nav-item-desktop:hover, .nav-item-hover {
         border-bottom: 2px solid #0082A1;
     }
 
-    #login-link {
+    @media (max-width: 500px) {
+        #header-desktop {
+            display: none;
+        }
+
+        #header-mobile {
+            display: flex;
+            flex-direction: column;
+            align-items: end;
+        }
+
+        #navigation-wrapper-mobile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        #navigation-mobile {
+            list-style: none;
+            text-align: center;
+        }
+
+        #navigation-mobile li {
+            margin-bottom: 5px;
+        }
+
+        .nav-item-mobile {
+            margin-bottom: 100px;
+        }
+
+        #login-mobile {
+            width: 70px;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            padding: 7px 10px;
+            border: 1px solid #0082A1;
+            border-radius: 10px;
+        }
+
+        #login-mobile:hover, #login-mobile.login-mobile-hover {
+            border-width: 2px;
+            margin-top: 4px;
+            margin-bottom: 9px;
+        }
+    }
+
+    #login-desktop {
         position: absolute;
         right: 0;
         margin: 8px;
@@ -86,7 +159,7 @@
         border-radius: 10px;
     }
 
-    #login-link:hover, #login-link.login-hover {
+    #login-desktop:hover, #login-desktop.login-desktop-hover {
         border-width: 2px;
         margin-right: 7px;
     }

@@ -2,32 +2,48 @@
     import { page } from "$app/state";
     import DOMPurify from "isomorphic-dompurify";
 
-    let noteTitle = "";
-    let noteText = "";
-    // let language = "";
-    let preview = false;
-    let save = false;
-
-    let id: number = 0;
     const noteUrl = `${page.url.origin}/n/`;
 
+    // Note options
+    let noteTitle = "";
+    let noteText = "";
+
+    // Page options
+    let preview = false;
+    let save = false;
+    let id: string;
+
+    function purify() {
+        noteTitle = noteTitle.replace(/["]/g, "\\\"");
+        noteTitle = noteTitle.replace(/[']/g, "\\\'")
+        noteText = noteText.replace(/["]/g, "\\\"");
+        noteText = noteText.replace(/[']/g, "\\\'");
+    }
+
+    function contaminate() {
+        noteTitle = noteTitle.replace(/\\\"/g, '\"');
+        noteTitle = noteTitle.replace(/\\\'/g, "\'")
+        noteText = noteText.replace(/\\\"/g, "\"");
+        noteText = noteText.replace(/\\\'/g, "\'");
+    }
+
     async function SaveNote() {
-        if(noteText !== "") {
-            noteTitle = noteTitle === "" ? "{No title}" : noteTitle;
-            noteTitle = noteTitle.replace('"', "'");
-            noteText = noteText.replace(/["]/g, "'");
+        if(noteText.trim().length !== 0) {
+            noteTitle = DOMPurify.sanitize(noteTitle);
+            noteText = DOMPurify.sanitize(noteText);
+            purify();
 
             const response = await fetch("/api/saveNote", {
                 method: "POST",
                 body: JSON.stringify({
-                    noteTitle: `${DOMPurify.sanitize(noteTitle)}`,
-                    noteText: `${DOMPurify.sanitize(noteText)}`
+                    noteTitle: `${noteTitle}`,
+                    noteText: `${noteText}`
                 })
             });
-
-            id = (await response.json())[0].id;
+            
+            contaminate();
+            ({id} = await response.json());
             save = true;
-            copyUrl();
         }
     }
 
@@ -46,10 +62,11 @@
                 <input type="checkbox" id="preview-toggle" bind:checked={preview}>
             </div>
         </div>
-        <input placeholder="Title..." maxlength=100 id="noteTitle" bind:value={noteTitle}>
-        {#if preview}
+        {#if preview || save}
+            <div placeholder="Title..." id="noteTitle">{DOMPurify.sanitize(noteTitle)}</div>
             <div id="noteText">{@html DOMPurify.sanitize(noteText)}</div>
         {:else}
+            <input placeholder="Title..." maxlength=30 id="noteTitle" bind:value={noteTitle}>
             <textarea placeholder="Your note..." id="noteText" bind:value={noteText}></textarea>
         {/if}
     </div>
@@ -76,9 +93,10 @@
     #input-wrapper {
         display: flex;
         flex-direction: column;
-        align-items: start;
+        align-items: center;
         height: 100%;
         margin-top: 10px;
+        width: 700px;
     }
 
     #options-wrapper {
@@ -93,26 +111,38 @@
     }
 
     #noteTitle {
-        width: 710px;
+        display: flex;
+        align-items: center;
+        width: 100%;
         height: 30px;
         border: 0;
         border-radius: 5px;
         margin-top: 10px;
         padding: 0px 5px;
+        font-size: 15px;
         color: black;
+        background-color: white;
     }
 
     #noteText {
         height: 100%;
-        width: 700px;
+        width: 100%;
         border: 0;
         border-radius: 20px;
         margin-top: 10px;
         padding: 10px;
+        font-size: 17px;
         color: black;
         background-color: white;
         resize: none;
         white-space: pre-wrap;
+    }
+
+    @media (max-width: 800px) {
+        #input-wrapper {
+            width: 90%;
+            max-width: 700px;
+        }
     }
 
     :global {
